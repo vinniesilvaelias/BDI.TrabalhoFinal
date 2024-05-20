@@ -51,8 +51,6 @@ namespace BDI.TrabalhoFinal.Controllers
         }
 
         // POST: Motorista/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Motorista motorista)
@@ -79,9 +77,6 @@ namespace BDI.TrabalhoFinal.Controllers
             return View(motorista);
         }
 
-        // POST: Motorista/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Motorista motorista)
