@@ -27,7 +27,7 @@ namespace BDI.TrabalhoFinal.Models
         [Display(Name = "Cartão de crédito")]
         public string CartaoCredito { get; set; }
 
-        [StringLength(10)]
+        [StringLength(1)]
         public string Sexo { get; set; }
 
         [StringLength(100)]

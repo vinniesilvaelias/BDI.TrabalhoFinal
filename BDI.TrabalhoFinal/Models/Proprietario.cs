@@ -22,6 +22,9 @@ namespace BDI.TrabalhoFinal.Models
         [StringLength(20)]
         public string Telefone { get; set; }
 
+        [StringLength(1)]
+        public string Sexo { get; set; }
+
         [Required]
         [StringLength(11)]
         public string CNH { get; set; }
