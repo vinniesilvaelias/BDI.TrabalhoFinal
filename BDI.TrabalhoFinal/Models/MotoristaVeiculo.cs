@@ -5,6 +5,9 @@ namespace BDI.TrabalhoFinal.Models
 {
     public class MotoristaVeiculo
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         [ForeignKey("FK_MotoristaVeiculo_Veiculos_VeiculosId")]
         public int MotoristaId { get; set; }
