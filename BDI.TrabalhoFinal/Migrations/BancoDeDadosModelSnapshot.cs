@@ -68,6 +68,9 @@ namespace BDI.TrabalhoFinal.Migrations
                         .HasMaxLength(14)
                         .HasColumnType("nvarchar(14)");
 
+                    b.Property<int>("ContaBancariaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -78,6 +81,11 @@ namespace BDI.TrabalhoFinal.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("Sexo")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
                     b.Property<string>("Telefone")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -85,7 +93,28 @@ namespace BDI.TrabalhoFinal.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContaBancariaId");
+
                     b.ToTable("Motoristas");
+                });
+
+            modelBuilder.Entity("BDI.TrabalhoFinal.Models.MotoristaVeiculo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MotoristaId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VeiculoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MotoristaVeiculos");
                 });
 
             modelBuilder.Entity("BDI.TrabalhoFinal.Models.Passageiro", b =>
@@ -128,8 +157,8 @@ namespace BDI.TrabalhoFinal.Migrations
 
                     b.Property<string>("Sexo")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -171,6 +200,11 @@ namespace BDI.TrabalhoFinal.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Sexo")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Telefone")
                         .IsRequired()
@@ -308,6 +342,17 @@ namespace BDI.TrabalhoFinal.Migrations
                     b.HasIndex("VeiculoId");
 
                     b.ToTable("Viagens");
+                });
+
+            modelBuilder.Entity("BDI.TrabalhoFinal.Models.Motorista", b =>
+                {
+                    b.HasOne("BDI.TrabalhoFinal.Models.ContaBancaria", "ContaBancaria")
+                        .WithMany()
+                        .HasForeignKey("ContaBancariaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ContaBancaria");
                 });
 
             modelBuilder.Entity("BDI.TrabalhoFinal.Models.Proprietario", b =>

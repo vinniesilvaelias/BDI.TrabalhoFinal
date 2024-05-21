@@ -9,11 +9,12 @@ namespace BDI.TrabalhoFinal.Data
         {
         }
 
-        public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Proprietario> Proprietarios { get; set; }
-        public DbSet<Motorista> Motoristas { get; set; }
         public DbSet<ContaBancaria> ContasBancarias { get; set; }
         public DbSet<Passageiro> Passageiros { get; set; }
         public DbSet<Viagem> Viagens { get; set; }
+        public DbSet<Veiculo> Veiculos { get; set; }
+        public DbSet<Motorista> Motoristas { get; set; }
+        public DbSet<MotoristaVeiculo> MotoristaVeiculos { get; set; }
     }
 }

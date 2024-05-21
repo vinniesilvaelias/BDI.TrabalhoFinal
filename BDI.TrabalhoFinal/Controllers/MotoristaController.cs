@@ -22,7 +22,11 @@ namespace BDI.TrabalhoFinal.Controllers
         // GET: Motorista
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Motoristas.ToListAsync());
+            var motorista = _context.Motoristas
+                .Include(m => m.ContaBancaria)
+                .ToListAsync();
+
+            return View(await motorista);
         }
 
         // GET: Motorista/Details/5
@@ -34,6 +38,7 @@ namespace BDI.TrabalhoFinal.Controllers
             }
 
             var motorista = await _context.Motoristas
+                .Include(p => p.ContaBancaria)
                 .Include(p => p.Veiculos)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (motorista == null)
@@ -51,8 +56,6 @@ namespace BDI.TrabalhoFinal.Controllers
         }
 
         // POST: Motorista/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Motorista motorista)
@@ -79,9 +82,6 @@ namespace BDI.TrabalhoFinal.Controllers
             return View(motorista);
         }
 
-        // POST: Motorista/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Motorista motorista)

@@ -38,6 +38,7 @@ namespace BDI.TrabalhoFinal.Controllers
                 .Include(v => v.Motorista)
                 .Include(v => v.Proprietario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (veiculo == null)
             {
                 return NotFound();
@@ -58,7 +59,15 @@ namespace BDI.TrabalhoFinal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Veiculo veiculo)
         {
+            var motoristaVeiculo = new MotoristaVeiculo
+            {
+                MotoristaId = veiculo.MotoristaId.Value,
+                VeiculoId = veiculo.Id
+            };
+
+            _context.MotoristaVeiculos.Add(motoristaVeiculo);
             _context.Add(veiculo);
+            
             await _context.SaveChangesAsync();
 
             ViewData["MotoristaId"] = new SelectList(_context.Motoristas, "Id", "Id");
@@ -130,6 +139,7 @@ namespace BDI.TrabalhoFinal.Controllers
                 .Include(v => v.Motorista)
                 .Include(v => v.Proprietario)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (veiculo == null)
             {
                 return NotFound();
@@ -144,9 +154,16 @@ namespace BDI.TrabalhoFinal.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var veiculo = await _context.Veiculos.FindAsync(id);
+            var motoristaVeiculo = await _context.MotoristaVeiculos.FirstOrDefaultAsync(x => x.VeiculoId == id);
+
             if (veiculo != null)
             {
                 _context.Veiculos.Remove(veiculo);
+
+                if (motoristaVeiculo != null)
+                {
+                    _context.MotoristaVeiculos.Remove(motoristaVeiculo);
+                }
             }
 
             await _context.SaveChangesAsync();

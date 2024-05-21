@@ -22,7 +22,11 @@ namespace BDI.TrabalhoFinal.Controllers
         // GET: Viagem
         public async Task<IActionResult> Index()
         {
-            var bancoDeDados = _context.Viagens.Include(v => v.Veiculo);
+            var bancoDeDados = _context.Viagens
+                .Include(v => v.Veiculo)
+                .Include(v => v.Passageiro)
+                .Include(v => v.Motorista);
+
             return View(await bancoDeDados.ToListAsync());
         }
 
@@ -36,6 +40,8 @@ namespace BDI.TrabalhoFinal.Controllers
 
             var viagem = await _context.Viagens
                 .Include(v => v.Veiculo)
+                .Include(v => v.Passageiro)
+                .Include(v => v.Motorista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (viagem == null)
             {
@@ -48,25 +54,26 @@ namespace BDI.TrabalhoFinal.Controllers
         // GET: Viagem/Create
         public IActionResult Create()
         {
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Cor");
+            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id");
             return View();
         }
 
-        // POST: Viagem/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Viagem viagem)
         {
             //if (ModelState.IsValid)
             //{
+                var motorista = await _context.Motoristas.FirstOrDefaultAsync(m => m.CPF.Equals(viagem.CpfMotorista));
+                viagem.Motorista = motorista;
+                var passageiro = await _context.Passageiros.FirstOrDefaultAsync(m => m.CPF.Equals(viagem.CpfPassageiro));
+                viagem.Passageiro = passageiro;
                 _context.Add(viagem);
                 await _context.SaveChangesAsync();
+                ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id", viagem.VeiculoId);
                 return RedirectToAction(nameof(Index));
             //}
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Cor", viagem.VeiculoId);
-            return View(viagem);
+            //return View(viagem);
         }
 
         // GET: Viagem/Edit/5
@@ -82,7 +89,7 @@ namespace BDI.TrabalhoFinal.Controllers
             {
                 return NotFound();
             }
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Cor", viagem.VeiculoId);
+            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id", viagem.VeiculoId);
             return View(viagem);
         }
 
@@ -116,10 +123,10 @@ namespace BDI.TrabalhoFinal.Controllers
                         throw;
                     }
                 }
+                ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id", viagem.VeiculoId);
                 return RedirectToAction(nameof(Index));
             //}
-            ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Cor", viagem.VeiculoId);
-            return View(viagem);
+            //return View(viagem);
         }
 
         // GET: Viagem/Delete/5
