@@ -23,9 +23,9 @@ namespace BDI.TrabalhoFinal.Controllers
         public async Task<IActionResult> Index()
         {
             var bancoDeDados = _context.Viagens
-                .Include(v => v.Veiculo.Id)
-                .Include(v => v.Passageiro.Id)
-                .Include(v => v.Motorista.Id);
+                .Include(v => v.Veiculo)
+                .Include(v => v.Passageiro)
+                .Include(v => v.Motorista);
 
             return View(await bancoDeDados.ToListAsync());
         }
@@ -39,9 +39,9 @@ namespace BDI.TrabalhoFinal.Controllers
             }
 
             var viagem = await _context.Viagens
-                .Include(v => v.Veiculo.Id)
-                .Include(v => v.Passageiro.Id)
-                .Include(v => v.Motorista.Id)
+                .Include(v => v.Veiculo)
+                .Include(v => v.Passageiro)
+                .Include(v => v.Motorista)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (viagem == null)
             {
@@ -64,6 +64,10 @@ namespace BDI.TrabalhoFinal.Controllers
         {
             //if (ModelState.IsValid)
             //{
+                var motorista = await _context.Motoristas.FirstOrDefaultAsync(m => m.CPF.Equals(viagem.CpfMotorista));
+                viagem.Motorista = motorista;
+                var passageiro = await _context.Passageiros.FirstOrDefaultAsync(m => m.CPF.Equals(viagem.CpfPassageiro));
+                viagem.Passageiro = passageiro;
                 _context.Add(viagem);
                 await _context.SaveChangesAsync();
                 ViewData["VeiculoId"] = new SelectList(_context.Veiculos, "Id", "Id", viagem.VeiculoId);
@@ -134,7 +138,7 @@ namespace BDI.TrabalhoFinal.Controllers
             }
 
             var viagem = await _context.Viagens
-                .Include(v => v.Veiculo.Id)
+                .Include(v => v.Veiculo)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (viagem == null)
             {

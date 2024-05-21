@@ -22,7 +22,11 @@ namespace BDI.TrabalhoFinal.Controllers
         // GET: Motorista
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Motoristas.ToListAsync());
+            var motorista = _context.Motoristas
+                .Include(m => m.ContaBancaria)
+                .ToListAsync();
+
+            return View(await motorista);
         }
 
         // GET: Motorista/Details/5
@@ -34,6 +38,7 @@ namespace BDI.TrabalhoFinal.Controllers
             }
 
             var motorista = await _context.Motoristas
+                .Include(p => p.ContaBancaria)
                 .Include(p => p.Veiculos)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (motorista == null)

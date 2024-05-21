@@ -33,9 +33,29 @@
                 <span asp-validation-for="Telefone" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Sexo" class="control-label"></label>
+                <input asp-for="Sexo" class="form-control" />
+                <span asp-validation-for="Sexo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="CNH" class="control-label"></label>
                 <input asp-for="CNH" class="form-control" />
                 <span asp-validation-for="CNH" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContaBancaria.Banco" class="control-label"></label>
+                <input asp-for="ContaBancaria.Banco" class="form-control" />
+                <span asp-validation-for="ContaBancaria.Banco" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContaBancaria.Agencia" class="control-label"></label>
+                <input asp-for="ContaBancaria.Agencia" class="form-control" />
+                <span asp-validation-for="ContaBancaria.Agencia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContaBancaria.Conta" class="control-label"></label>
+                <input asp-for="ContaBancaria.Conta" class="form-control" />
+                <span asp-validation-for="ContaBancaria.Conta" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />

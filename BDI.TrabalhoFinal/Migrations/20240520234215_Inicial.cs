@@ -27,20 +27,17 @@ namespace BDI.TrabalhoFinal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Motoristas",
+                name: "MotoristaVeiculos",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CPF = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Endereco = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    CNH = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false)
+                    MotoristaId = table.Column<int>(type: "int", nullable: false),
+                    VeiculoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Motoristas", x => x.Id);
+                    table.PrimaryKey("PK_MotoristaVeiculos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,13 +51,38 @@ namespace BDI.TrabalhoFinal.Migrations
                     Endereco = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CartaoCredito = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Sexo = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Sexo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
                     CidadeOrigem = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Passageiros", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Motoristas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CPF = table.Column<string>(type: "nvarchar(14)", maxLength: 14, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Endereco = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Sexo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
+                    CNH = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
+                    ContaBancariaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Motoristas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Motoristas_ContasBancarias_ContaBancariaId",
+                        column: x => x.ContaBancariaId,
+                        principalTable: "ContasBancarias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -73,6 +95,7 @@ namespace BDI.TrabalhoFinal.Migrations
                     Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Endereco = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Sexo = table.Column<string>(type: "nvarchar(1)", maxLength: 1, nullable: false),
                     CNH = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     ContaBancariaId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -150,7 +173,7 @@ namespace BDI.TrabalhoFinal.Migrations
                         column: x => x.MotoristaId,
                         principalTable: "Motoristas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Viagens_Passageiros_PassageiroId",
                         column: x => x.PassageiroId,
@@ -163,6 +186,11 @@ namespace BDI.TrabalhoFinal.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Motoristas_ContaBancariaId",
+                table: "Motoristas",
+                column: "ContaBancariaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proprietarios_ContaBancariaId",
@@ -198,6 +226,9 @@ namespace BDI.TrabalhoFinal.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MotoristaVeiculos");
+
             migrationBuilder.DropTable(
                 name: "Viagens");
 
