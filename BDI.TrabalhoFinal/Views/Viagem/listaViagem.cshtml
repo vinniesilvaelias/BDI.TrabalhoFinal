@@ -1,0 +1,29 @@
+@model IEnumerable<dynamic>
+
+    <h2>Viagens de veículos da marca @ViewBag.Brand no dia 03/01/2024 entre 21:00 e 24:00</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Placa</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Motorista</th>
+                <th>Passageiro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.Brand</td>
+                <td>@trip.Plate</td>
+                <td>@trip.Origin</td>
+                <td>@trip.Destination</td>
+                <td>@trip.DriverName</td>
+                <td>@trip.PassengerName</td>
+            </tr>
+        }
+        </tbody>
+    </table>

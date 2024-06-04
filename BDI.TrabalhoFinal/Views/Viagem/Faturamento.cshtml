@@ -1,0 +1,25 @@
+@model IEnumerable<Revenue>
+
+    @{
+    var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName((int)ViewBag.Month);
+    }
+
+    <h2>Top 20 Faturamentos de @monthName @ViewBag.Year</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var revenue in Model)
+        {
+            <tr>
+                <td>@revenue.Date.ToShortDateString()</td>
+                <td>@revenue.Amount.ToString("C")</td>
+            </tr>
+        }
+        </tbody>
+    </table>

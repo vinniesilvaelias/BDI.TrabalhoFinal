@@ -167,5 +167,44 @@ namespace BDI.TrabalhoFinal.Controllers
         {
             return _context.Viagens.Any(e => e.Id == id);
         }
+
+        private async Task<IActionResult> listaViagem(string brand) 
+        {
+            var date = new DateTime(2024, 1, 3);
+            var startTime = new DateTime(2024, 1, 3, 21, 0, 0);
+            var endTime = new DateTime(2024, 1, 3, 21, 59, 59);
+
+            var trips = _context.Viagens
+            .Include(t => t.Veiculo)
+            .Include(t => t.Motorista)
+            .Include(t => t.Passageiro)
+            .Where(t => t.Veiculo.Marca == brand && t.StartTime >= startTime && t.EndTime <= endTime)
+            .Select(t => new
+            {
+                t.Veiculo.Marca,
+                t.Veiculo.Placa,
+                t.Origem,
+                t.Destino,
+                DriverName = t.Motorista.Nome,
+                PassengerName = t.Passageiro.Nome
+            })
+            .ToList();
+
+            ViewBag.Brand = brand;
+            return View(trips);
+        }
+
+        private async Task<IActionResult> listaMaioresFaturamentos(int ano, int mes)
+        {
+            var topFaturamentos = await _context.Viagens
+                .Where(r => r.Date.Year == ano &&  r.Date.Month == mes)
+                .OrderByDescending(r => r.Valor)
+                .Take(20)
+                .ToList();
+
+            ViewBag.Year = ano;
+            ViewBag.Month = month;
+            return View(topFaturamentos);
+        }
     }
 }
