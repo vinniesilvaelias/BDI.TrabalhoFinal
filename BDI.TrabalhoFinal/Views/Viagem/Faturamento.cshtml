@@ -1,10 +1,6 @@
-@model IEnumerable<Revenue>
+@model IEnumerable<dynamic>
 
-    @{
-    var monthName = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName((int)ViewBag.Month);
-    }
-
-    <h2>Top 20 Faturamentos de @monthName @ViewBag.Year</h2>
+    <h2>Top 20 Faturamentos em @ViewBag.Mes/@ViewBag.Ano</h2>
 
     <table>
         <thead>
@@ -14,11 +10,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var revenue in Model)
+            @foreach (var faturamento in Model)
         {
             <tr>
-                <td>@revenue.Date.ToShortDateString()</td>
-                <td>@revenue.Amount.ToString("C")</td>
+                <td>@faturamento.Data.ToString("dd/MM/yyyy")</td>
+                <td>@faturamento.Valor.ToString("C")</td>
             </tr>
         }
         </tbody>
