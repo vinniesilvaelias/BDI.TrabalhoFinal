@@ -199,16 +199,14 @@ namespace BDI.TrabalhoFinal.Controllers
             return View(veiculos);
         }
 
-        private async Task<IActionResult> listaMaioresFaturamentos(int ano, int mes)
+        public async Task<IActionResult> TopFaturamentos(int ano, int mes)
         {
-            var topFaturamentos = await _context.Viagens
-                .Where(r => r.Date.Year == ano &&  r.Date.Month == mes)
-                .OrderByDescending(r => r.Valor)
+            var topFaturamentos = await _context.Faturamentos
+                .Where(f => f.Data.Year == ano && f.Data.Month == mes)
+                .OrderByDescending(f => f.Valor)
                 .Take(20)
-                .ToList();
+                .ToListAsync();
 
-            ViewBag.Year = ano;
-            ViewBag.Month = mes;
             return View(topFaturamentos);
         }
 
