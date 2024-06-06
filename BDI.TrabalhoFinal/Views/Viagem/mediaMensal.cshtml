@@ -1,0 +1,25 @@
+@model IEnumerable<dynamic>
+
+<h2>Média Mensal de Viagens por Sexo</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Ano</th>
+            <th>Mês</th>
+            <th>Sexo</th>
+            <th>Média de Viagens</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Year</td>
+                <td>@item.Month</td>
+                <td>@item.Gender</td>
+                <td>@item.AverageTrips</td>
+            </tr>
+        }
+    </tbody>
+</table>

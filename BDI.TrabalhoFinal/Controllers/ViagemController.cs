@@ -203,8 +203,25 @@ namespace BDI.TrabalhoFinal.Controllers
                 .ToList();
 
             ViewBag.Year = ano;
-            ViewBag.Month = month;
+            ViewBag.Month = mes;
             return View(topFaturamentos);
+        }
+
+        private async Task<IActionResult> MediaMensalViagem()
+        {
+            var mediaMensalViagem = await _context.Viagens
+                .Include(v => v.Passageiro)
+                .GroupBy(v => new { v.Data.Year, v.Data.Month, v.Passageiro.Sexo })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Gender = g.Key.Sexo,
+                    AverageTrips = g.Count() / 1.0 // Ajuste conforme a lógica necessária
+                })
+                .ToListAsync();
+
+            return View(mediaMensalViagem);
         }
     }
 }
