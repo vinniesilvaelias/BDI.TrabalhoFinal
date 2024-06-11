@@ -1,0 +1,32 @@
+@model IEnumerable<dynamic>
+
+    <h2>Veículos da marca @ViewBag.Marca com viagens em 03/01/2024 das 21:00 às 24:00</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Placa</th>
+                <th>Local de Origem</th>
+                <th>Local de Destino</th>
+                <th>Nome do Motorista</th>
+                <th>Nome do Passageiro</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var veiculo in Model)
+        {
+            foreach (var viagem in veiculo.Viagens)
+            {
+            <tr>
+                <td>@veiculo.Marca</td>
+                <td>@veiculo.Placa</td>
+                <td>@viagem.LocalOrigem</td>
+                <td>@viagem.LocalDestino</td>
+                <td>@viagem.NomeMotorista</td>
+                <td>@viagem.NomePassageiro</td>
+            </tr>
+            }
+        }
+        </tbody>
+    </table>

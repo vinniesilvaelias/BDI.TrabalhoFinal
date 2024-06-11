@@ -174,5 +174,29 @@ namespace BDI.TrabalhoFinal.Controllers
         {
             return _context.Veiculos.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> FaturamentoVeiculos(int ano, int mes)
+        {
+            var faturamentos = await _context.Viagens
+                .Include(v => v.Veiculo)
+                    .ThenInclude(v => v.Proprietario)
+                .Include(v => v.TipoPagamento)
+                .Where(v => v.Data.Year == ano && v.Data.Month == mes)
+                .GroupBy(v => new { v.Veiculo.Proprietario.Nome, v.Veiculo.Placa, v.TipoPagamento.Descricao })
+                .Select(g => new
+                {
+                    NomeProprietario = g.Key.Nome,
+                    PlacaVeiculo = g.Key.Placa,
+                    TipoPagamento = g.Key.Descricao,
+                    ValorTotalFaturado = g.Sum(v => v.Valor),
+                    ValorMedioFaturamento = g.Average(v => v.Valor)
+                })
+                .OrderBy(f => f.NomeProprietario)
+                .ThenBy(f => f.TipoPagamento)
+                .ThenBy(f => f.PlacaVeiculo)
+                .ToListAsync();
+
+            return View(faturamentos);
+        }
     }
 }

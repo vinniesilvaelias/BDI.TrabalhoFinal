@@ -167,5 +167,64 @@ namespace BDI.TrabalhoFinal.Controllers
         {
             return _context.Viagens.Any(e => e.Id == id);
         }
+
+        public async Task<IActionResult> VeiculosPorMarcaEViagens(string marca)
+        {
+            var dataInicio = new DateTime(2024, 1, 3, 21, 0, 0);
+            var dataFim = new DateTime(2024, 1, 4, 0, 0, 0);
+
+            var veiculos = await _context.Veiculos
+                .Include(v => v.Marca)
+                .Include(v => v.Viagens)
+                    .ThenInclude(v => v.Motorista)
+                .Include(v => v.Viagens)
+                    .ThenInclude(v => v.Passageiro)
+                .Where(v => v.Marca.Nome == marca)
+                .Where(v => v.Viagens.Any(v => v.Data >= dataInicio && v.Data < dataFim))
+                .Select(v => new
+                {
+                    Marca = v.Marca.Nome,
+                    Placa = v.Placa,
+                    Viagens = v.Viagens.Where(vi => vi.Data >= dataInicio && vi.Data < dataFim)
+                                       .Select(vi => new
+                                       {
+                                           LocalOrigem = vi.LocalOrigem,
+                                           LocalDestino = vi.LocalDestino,
+                                           NomeMotorista = vi.Motorista.Nome,
+                                           NomePassageiro = vi.Passageiro.Nome
+                                       })
+                })
+                .ToListAsync();
+
+            return View(veiculos);
+        }
+
+        public async Task<IActionResult> TopFaturamentos(int ano, int mes)
+        {
+            var topFaturamentos = await _context.Faturamentos
+                .Where(f => f.Data.Year == ano && f.Data.Month == mes)
+                .OrderByDescending(f => f.Valor)
+                .Take(20)
+                .ToListAsync();
+
+            return View(topFaturamentos);
+        }
+
+        private async Task<IActionResult> MediaMensalViagem()
+        {
+            var mediaMensalViagem = await _context.Viagens
+                .Include(v => v.Passageiro)
+                .GroupBy(v => new { v.Data.Year, v.Data.Month, v.Passageiro.Sexo })
+                .Select(g => new
+                {
+                    Year = g.Key.Year,
+                    Month = g.Key.Month,
+                    Gender = g.Key.Sexo,
+                    AverageTrips = g.Count() / 1.0 // Ajuste conforme a lógica necessária
+                })
+                .ToListAsync();
+
+            return View(mediaMensalViagem);
+        }
     }
 }

@@ -1,0 +1,27 @@
+@model IEnumerable<dynamic>
+
+    <h2>Faturamento dos Veículos em @ViewBag.Mes/@ViewBag.Ano</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Proprietário</th>
+                <th>Placa do Veículo</th>
+                <th>Tipo de Pagamento</th>
+                <th>Valor Total Faturado</th>
+                <th>Valor Médio de Faturamento</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faturamento in Model)
+        {
+            <tr>
+                <td>@faturamento.NomeProprietario</td>
+                <td>@faturamento.PlacaVeiculo</td>
+                <td>@faturamento.TipoPagamento</td>
+                <td>@faturamento.ValorTotalFaturado.ToString("C")</td>
+                <td>@faturamento.ValorMedioFaturamento.ToString("C")</td>
+            </tr>
+        }
+        </tbody>
+    </table>

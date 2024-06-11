@@ -1,0 +1,21 @@
+@model IEnumerable<dynamic>
+
+    <h2>Top 20 Faturamentos em @ViewBag.Mes/@ViewBag.Ano</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Data</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var faturamento in Model)
+        {
+            <tr>
+                <td>@faturamento.Data.ToString("dd/MM/yyyy")</td>
+                <td>@faturamento.Valor.ToString("C")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
